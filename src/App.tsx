@@ -1,11 +1,12 @@
 import Sidebar from "./Components/Sidebar/Sidebar";
+import TareasPage from "./pages/Tareas/TareasPage";
 function App() {
   return (
     <div className="app">
       <Sidebar />
-      <main>
-        <h1>Aqui se cargaran las pages</h1>
-      </main>
+
+      <TareasPage />
+
     </div>
   );
 }
