@@ -4,15 +4,37 @@ import { fileURLToPath } from "node:url";
 import "./db.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+//IMPORTACION DE IPCMAIN PARA COMUNICACION ENTRE PROCESOS
+import { ipcMain } from "electron";
+import { db } from "./db.js";
+
 
 const isDev = !app.isPackaged;
+/*
+HANDLERS DE IPC PARA COMUNICACION ENTRE PROCESOS
+
+*/
+//HANDLER PARA LISTAR TAREAS
+ipcMain.handle("tarea:listar", () => {
+  return db.prepare("SELECT * FROM tarea ORDER BY id DESC").all();
+});
+
+//HANDER PARA JOIN DE LAS TAREAS
+ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
+  const stmt = db.prepare(
+    "INSERT INTO tarea (titulo, descripcion, fecha) VALUES (?, ?, ?)"
+  );
+  const date = new Date().toISOString();
+  const info = stmt.run(titulo, descripcion,date);
+  return { id: info.lastInsertRowid };
+});
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
     },

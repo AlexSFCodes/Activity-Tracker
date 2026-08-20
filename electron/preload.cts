@@ -1,0 +1,6 @@
+import { contextBridge, ipcRenderer } from "electron";
+
+contextBridge.exposeInMainWorld("api", {
+  crearTarea: (titulo: string, descripcion: string) =>
+    ipcRenderer.invoke("tarea:crear", titulo, descripcion),
+});
