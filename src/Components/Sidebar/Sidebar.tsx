@@ -1,5 +1,10 @@
 import "./Sidebar.css";
-export default function SideBar() {
+
+type SidebarProps = {
+  cambiarPagina: (pagina: "tareas" | "nuevaTarea") => void;
+};
+
+export default function SideBar({ cambiarPagina }: SidebarProps) {
     return (
         <div className="sidebar">
             <div className="logo">
@@ -7,11 +12,11 @@ export default function SideBar() {
                 <h1>TaskTracker</h1>
             </div>
             <ul>
-                <li>
+                <li onClick={() => cambiarPagina("tareas")}>
                     <i className="fas fa-tasks"></i>
                     <span>Tareas</span>
                 </li>
-                <li>
+                <li onClick={() => cambiarPagina("nuevaTarea")}>
                     <i className="fas fa-plus-circle"></i>
                     <span>Nueva Tarea</span>
                 </li>

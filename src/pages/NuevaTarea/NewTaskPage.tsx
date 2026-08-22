@@ -62,7 +62,7 @@ export default function NewTaskPage() {
                             placeholder="¿Qué quieres lograr?"
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
-                            required
+                            
                         />
                     </div>
 
@@ -82,7 +82,7 @@ export default function NewTaskPage() {
                         />
                     </div>
 
-                    {error && <p className="form-error">{error}</p>}
+                    {error && <p className="form-error">  {error}</p>}
 
                     <div className="form-actions">
                         <button
@@ -102,7 +102,7 @@ export default function NewTaskPage() {
                     </div>
                 </form>
             </section>
-
+            
             <section
                 className="plan-sugerido"
                 aria-labelledby="plan-title"
