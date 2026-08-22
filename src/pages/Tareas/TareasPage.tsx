@@ -1,30 +1,33 @@
 import TaskCard from "./TaskCard";
 import "./TareasPage.css";
+import { useEffect, useState } from "react";
+
+interface Tarea {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    fecha: string;
+    progreso: number;
+}
 
 export default function TareasPage() {
-    const tareas = [
-        {
-            id: 1,
-            title: "Task 1",
-            description: "Description for Task 1",
-            creationDate: "2023-10-15",
-            progress: 100,
-        },
-        {
-            id: 2,
-            title: "Task 2",
-            description: "Description for Task 2",
-            creationDate: "2023-10-16",
-            progress: 80,
-        },
-        {
-            id: 3,
-            title: "Task 3",
-            description: "Description for Task 3",
-            creationDate: "2023-10-17",
-            progress: 40,
-        },
-    ];
+    const [tareas, setTareas] = useState<Tarea[]>([]);
+
+    async function fetchTareas() {
+        try {
+            const tareasObtenidas = await window.api.mostrarTareas();
+
+            console.log("Tareas obtenidas:", tareasObtenidas);
+
+            setTareas(tareasObtenidas);
+        } catch (err) {
+            console.error("Error al obtener las tareas:", err);
+        }
+    }
+
+    useEffect(() => {
+        fetchTareas();
+    }, []);
 
     return (
         <main className="tareas-page">
@@ -38,10 +41,10 @@ export default function TareasPage() {
                     {tareas.map((tarea) => (
                         <TaskCard
                             key={tarea.id}
-                            title={tarea.title}
-                            description={tarea.description}
-                            creationDate={tarea.creationDate}
-                            progress={tarea.progress}
+                            title={tarea.titulo}
+                            description={tarea.descripcion}
+                            creationDate={tarea.fecha}
+                            progress={tarea.progreso}
                         />
                     ))}
                 </div>
