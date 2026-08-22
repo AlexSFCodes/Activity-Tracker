@@ -1,56 +1,65 @@
-.task-card{
- 
-    padding: 10px;
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px 2px rgba(2, 94, 0, 0.274);
-}
-
-.task-header{
+.task-card {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-}
+    gap: 2rem;
 
-.task-status{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    padding: 1.5rem;
+
+    background-color: #ffffff;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    color: #000000;
-    border: 1px solid #8DAA91;
-    background-color: #8DAA91;
-    padding: 5px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.task-progress{
+.task-card-content {
+    flex: 1;
+}
+
+.task-card h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+    color: #6b7f6e;
+}
+
+.task-description {
+    margin: 0 0 0.75rem;
+    color: #555;
+}
+
+.task-date {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #888;
+}
+
+.task-progress {
+    width: 220px;
+}
+
+.task-progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.progress-bar {
     width: 100%;
-    height: 25px;
-    border-radius: 5px;
-    background-color: #e0e0e0;
-    margin-top: 10px;
+    height: 8px;
+
     overflow: hidden;
+
+    background-color: #ddd;
+    border-radius: 999px;
 }
 
-.task-fecha{
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
-}
-
-.progress-bar{
+.progress-bar-fill {
     height: 100%;
-    border-radius: 5px;
-    background-color: #8DAA91;
-    font-size: 12px;
-}
+    background-color: #2e7d32;
+    border-radius: inherit;
 
-.task-card button{
-    background-color: #8DAA91;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
+    transition: width 0.3s ease;
 }

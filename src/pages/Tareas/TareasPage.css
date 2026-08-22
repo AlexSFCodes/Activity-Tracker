@@ -1,8 +1,32 @@
-.tareas-page{
+.tareas-page {
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #eeeeee;
+    width: 100%;
+}
+
+.tareas-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tareas-header {
+    margin-bottom: 2rem;
+}
+
+.tareas-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.tareas-header p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+
+.tareas-list {
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-    border: 1px solid #8DAA91;
-    width: 100%;
+    gap: 1rem;
 }

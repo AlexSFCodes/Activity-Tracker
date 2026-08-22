@@ -1,26 +1,45 @@
-
-
 import "./TaskCard.css";
-export default function TaskCard(props: TaskCardProps) { 
-    return (
-        <div className="task-card">
-            <div className="task-header">
-                <h3>{props.title}</h3>
-                <span className="task-status">In Progress {props.progress}%</span>
-            </div>
-            <p className="task-description">{props.description}</p>
-            <div className="task-fecha">Fecha Creación: {props.creationDate}</div>
-            <div className="task-progress">
-                <div className="progress-bar" style={{ width: `${props.progress}%` }}></div>
-            </div>
-            <button>Ver Detalles</button>
-        </div>
-    );
-} 
 
 interface TaskCardProps {
     title: string;
     description: string;
     creationDate: string;
-    progress: number; // Progress percentage (0-100)
+    progress: number;
+}
+
+export default function TaskCard({
+    title,
+    description,
+    creationDate,
+    progress,
+}: TaskCardProps) {
+    return (
+        <article className="task-card">
+            <div className="task-card-content">
+                <h2>{title}</h2>
+
+                <p className="task-description">
+                    {description}
+                </p>
+
+                <p className="task-date">
+                    Creada: {creationDate}
+                </p>
+            </div>
+
+            <div className="task-progress">
+                <div className="task-progress-header">
+                    <span>Progreso</span>
+                    <span>{progress}%</span>
+                </div>
+
+                <div className="progress-bar">
+                    <div
+                        className="progress-bar-fill"
+                        style={{ width: `${progress}%` }}
+                    />
+                </div>
+            </div>
+        </article>
+    );
 }
