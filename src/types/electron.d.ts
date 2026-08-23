@@ -1,5 +1,13 @@
 export {};
 
+interface Tarea {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    fecha: string;
+    progreso: number;
+}
+
 declare global {
   interface Window {
     api: {
@@ -7,19 +15,7 @@ declare global {
         titulo: string,
         descripcion: string
       ) => Promise<{ id: number }>;
-      mostrarTareas: () => Promise<Array<{
-        id: number;
-        titulo: string;
-        descripcion: string;
-        fecha: string;
-      }>>;
+      mostrarTareas: () => Promise<Tarea[]>;
     };
-  }     
-}
-interface Tarea {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha: string;
-    progreso: number;
+  }
 }

@@ -39,6 +39,7 @@ export default function TaskCard({
                         style={{ width: `${progress}%` }}
                     />
                 </div>
+                <button className="btn bt n-primary"> Ver detalles </button>
             </div>
         </article>
     );

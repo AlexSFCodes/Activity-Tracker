@@ -35,6 +35,8 @@
 
 .task-progress {
     width: 220px;
+    display: flex;
+    flex-direction: column;
 }
 
 .task-progress-header {
@@ -62,4 +64,9 @@
     border-radius: inherit;
 
     transition: width 0.3s ease;
+}
+
+.btn{
+background-color: #596fff;
+ margin-top: 10px;
 }

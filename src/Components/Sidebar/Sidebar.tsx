@@ -1,7 +1,7 @@
 import "./Sidebar.css";
 
 type SidebarProps = {
-  cambiarPagina: (pagina: "tareas" | "nuevaTarea") => void;
+  cambiarPagina: (pagina: "tareas" | "nuevaTarea" | "pomodoro") => void;
 };
 
 export default function SideBar({ cambiarPagina }: SidebarProps) {
@@ -19,6 +19,10 @@ export default function SideBar({ cambiarPagina }: SidebarProps) {
                 <li onClick={() => cambiarPagina("nuevaTarea")}>
                     <i className="fas fa-plus-circle"></i>
                     <span>Nueva Tarea</span>
+                </li>
+                <li onClick={() => cambiarPagina("pomodoro")}>
+                    <i className="far fa-clock"></i>
+                    <span> Pomodoro</span>
                 </li>
                 <li>
                     <i className="fas fa-chart-line"></i>

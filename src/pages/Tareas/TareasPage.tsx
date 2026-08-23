@@ -1,6 +1,7 @@
 import TaskCard from "./TaskCard";
 import "./TareasPage.css";
 import { useEffect, useState } from "react";
+export {};
 
 interface Tarea {
     id: number;
@@ -8,6 +9,18 @@ interface Tarea {
     descripcion: string;
     fecha: string;
     progreso: number;
+}
+
+declare global {
+  interface Window {
+    api: {
+      crearTarea: (
+        titulo: string,
+        descripcion: string
+      ) => Promise<{ id: number }>;
+      mostrarTareas: () => Promise<Tarea[]>;
+    };
+  }
 }
 
 export default function TareasPage() {
@@ -18,7 +31,6 @@ export default function TareasPage() {
             const tareasObtenidas = await window.api.mostrarTareas();
 
             console.log("Tareas obtenidas:", tareasObtenidas);
-
             setTareas(tareasObtenidas);
         } catch (err) {
             console.error("Error al obtener las tareas:", err);

@@ -19,6 +19,13 @@ ipcMain.handle("tarea:listar", () => {
   return db.prepare("SELECT * FROM tarea ORDER BY id DESC").all();
 });
 
+//HANDLER PARA CARGAR TODOS LOS CICLOS POMODOROS RELACIONADOS A LA TAREA
+ipcMain.handle("pomodoro:listar", (_event, tareaId) => {
+  return db
+    .prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC")
+    .all(tareaId);
+});
+
 //HANDER PARA JOIN DE LAS TAREAS
 ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
   const stmt = db.prepare(
