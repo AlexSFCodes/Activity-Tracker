@@ -11,7 +11,7 @@ function App() {
   
   return (
     <div className="app">
-        <Sidebar cambiarPagina={setPaginaActual} />
+        {<Sidebar cambiarPagina={setPaginaActual} />} 
         <PomodoroStartModal></PomodoroStartModal>
 {/*         {paginaActual === "tareas" && <TareasPage />}
         {paginaActual === "nuevaTarea" && <NewTaskPage />}
