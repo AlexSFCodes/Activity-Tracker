@@ -3,16 +3,19 @@ import TareasPage from "./pages/Tareas/TareasPage";
 import NewTaskPage from "./pages/NuevaTarea/NewTaskPage";
 import { useState } from "react";
 import PomodoroPage from "./pages/Pomodoro/PomodoroPage";
+import PomodoroStartModal from "./Components/PomodoroStartModal/PomodoroStartModal";
+
 function App() {
   
   const [paginaActual, setPaginaActual] = useState<"tareas" | "nuevaTarea" | "pomodoro">("nuevaTarea");
   
   return (
     <div className="app">
-      <Sidebar cambiarPagina={setPaginaActual} />
-      {paginaActual === "tareas" && <TareasPage />}
-      {paginaActual === "nuevaTarea" && <NewTaskPage />}
-      {paginaActual === "pomodoro" && <PomodoroPage />}
+        <Sidebar cambiarPagina={setPaginaActual} />
+        <PomodoroStartModal></PomodoroStartModal>
+{/*         {paginaActual === "tareas" && <TareasPage />}
+        {paginaActual === "nuevaTarea" && <NewTaskPage />}
+        {paginaActual === "pomodoro" && <PomodoroPage />} */}
 
     </div>
   );

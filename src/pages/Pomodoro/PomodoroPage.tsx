@@ -13,6 +13,7 @@ const MODE_LABELS: Record<PomodoroMode, string> = {
     focus: "Pomodoro",
     shortBreak: "Descanso corto",
     longBreak: "Descanso largo",
+    
 };
 
 function formatTime(totalSeconds: number) {
@@ -25,7 +26,6 @@ export default function PomodoroPage() {
     const [mode, setMode] = useState<PomodoroMode>("focus");
     const [secondsLeft, setSecondsLeft] = useState(DURATIONS.focus);
     const [isRunning, setIsRunning] = useState(false);
-    const [taskName, setTaskName] = useState("");
     const [completedSessions, setCompletedSessions] = useState(0);
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function PomodoroPage() {
         setMode(nextMode);
         setSecondsLeft(DURATIONS[nextMode]);
         setIsRunning(false);
-    }
+    } 
 
     function resetTimer() {
         setIsRunning(false);
@@ -107,28 +107,6 @@ export default function PomodoroPage() {
                         </button>
                     </div>
                 </div>
-
-                <aside className="pomodoro-side-panel">
-                    <section className="active-task-card" aria-labelledby="active-task-title">
-                        <div className="card-heading">
-                            <span className="card-icon" aria-hidden="true">✓</span>
-                            <h2 id="active-task-title">Tarea actual</h2>
-                        </div>
-                        <label htmlFor="pomodoro-task">¿En qué vas a trabajar?</label>
-                        <input id="pomodoro-task" type="text" value={taskName} onChange={(event) => setTaskName(event.target.value)} placeholder="Escribe el nombre de la tarea" />
-                        <p>{taskName.trim() || "Añade una tarea para mantener el enfoque."}</p>
-                    </section>
-
-                    <section className="tips-card" aria-labelledby="tips-title">
-                        <h2 id="tips-title">Tu ritmo de hoy</h2>
-                        <div className="session-dots" aria-label={`${completedSessions} de 4 sesiones`}>
-                            {[0, 1, 2, 3].map((session) => (
-                                <span key={session} className={session < completedSessions ? "session-dot done" : "session-dot"} />
-                            ))}
-                        </div>
-                        <p>Completa 4 pomodoros y toma un descanso largo.</p>
-                    </section>
-                </aside>
             </section>
         </main>
     );
