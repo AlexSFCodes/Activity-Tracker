@@ -9,10 +9,13 @@ interface Tarea {
     progreso: number;
 }
 
-export default function PomodoroStartModal() {
+interface PomodoroStartModalProps {
+    onClose: () => void;
+    onIniciar: () => void;
+}
+export default function PomodoroStartModal({ onClose, onIniciar }: PomodoroStartModalProps) {
     const [busqueda, setBusqueda] = useState("");
     const [tareas, setTareas] = useState<Tarea[]>([]);
-
     async function fetchTareas() {
         try {
             const tareasObtenidas = await window.api.mostrarTareas();
@@ -33,49 +36,67 @@ export default function PomodoroStartModal() {
         : [];
 
     return (
-        <section className="pomodoro-start-modal" aria-labelledby="pomodoro-modal-title">
-            <header className="pomodoro-start-modal__header">
-                <span className="pomodoro-start-modal__eyebrow">Nueva sesión</span>
-                <h2 id="pomodoro-modal-title">Antes de iniciar</h2>
-                <p>Elige una tarea para mantener el enfoque o comienza una sesión libre.</p>
-            </header>
+        <div className="pomodoro-start-modal__overlay">
+            <section className="pomodoro-start-modal" aria-labelledby="pomodoro-modal-title">
+                <header className="pomodoro-start-modal__header">
+                    <button
+                        type="button"
+                        className="pomodoro-start-modal__close"
+                        onClick={onClose}
+                        aria-label="Cerrar"
+                    >
+                        ✕
+                    </button>
+                    <span className="pomodoro-start-modal__eyebrow">Nueva sesión</span>
+                    <h2 id="pomodoro-modal-title">Antes de iniciar</h2>
+                    <p>Elige una tarea para mantener el enfoque o comienza una sesión libre.</p>
+                </header>
 
-            <form className="pomodoro-start-modal__form">
-                <label htmlFor="pomodoro-task">Buscar tarea</label>
-                <input
-                    onChange={(e) => setBusqueda(e.target.value)}
-                    id="pomodoro-task"
-                    name="pomodoro-task"
-                    type="text"
-                    placeholder="Ej. Terminar el informe"
-                />
+                <form className="pomodoro-start-modal__form">
+                    <label htmlFor="pomodoro-task">Buscar tarea</label>
+                    <input
+                        onChange={(e) => setBusqueda(e.target.value)}
+                        id="pomodoro-task"
+                        name="pomodoro-task"
+                        type="text"
+                        placeholder="Ej. Terminar el informe"
+                    />
 
-                {resultados.length > 0 && (
-                    <ul className="pomodoro-start-modal__results">
-                        {resultados.map(task => (
-                            <li key={task.id} className="pomodoro-start-modal__result">
-                                <span>{task.titulo}</span>
-                                <button type="button" className="pomodoro-start-modal__choose">
-                                    Escoger
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                    {resultados.length > 0 && (
+                        <ul className="pomodoro-start-modal__results">
+                            {resultados.map(task => (
+                                <li key={task.id} className="pomodoro-start-modal__result">
+                                    <span>{task.titulo}</span>
+                                    <button
+                                        type="button"
+                                        className="pomodoro-start-modal__choose"
+                                        onClick={onIniciar}
+                                    >
+                                        Escoger
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
-                {busqueda.trim() !== "" && resultados.length === 0 && (
-                    <p className="pomodoro-start-modal__empty">
-                        No se encontraron tareas.
-                    </p>
-                )}
-            </form>
+                    {busqueda.trim() !== "" && resultados.length === 0 && (
+                        <p className="pomodoro-start-modal__empty">
+                            No se encontraron tareas.
+                        </p>
+                    )}
+                </form>
 
-            <footer className="pomodoro-start-modal__footer">
-                <p>¿No quieres vincular una tarea?</p>
-                <button className="pomodoro-start-modal__secondary" type="button">
-                    Iniciar sesión libre
-                </button>
-            </footer>
-        </section>
+                <footer className="pomodoro-start-modal__footer">
+                    <p>¿No quieres vincular una tarea?</p>
+                    <button
+                        className="pomodoro-start-modal__secondary"
+                        type="button"
+                        onClick={onIniciar}
+                    >
+                        Iniciar sesión libre
+                    </button>
+                </footer>
+            </section>
+        </div>
     );
 }

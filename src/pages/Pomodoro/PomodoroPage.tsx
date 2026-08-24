@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./PomodoroPage.css";
+import PomodoroStartModal from "../../Components/PomodoroStartModal/PomodoroStartModal"
 
 type PomodoroMode = "focus" | "shortBreak" | "longBreak";
 
@@ -13,7 +14,6 @@ const MODE_LABELS: Record<PomodoroMode, string> = {
     focus: "Pomodoro",
     shortBreak: "Descanso corto",
     longBreak: "Descanso largo",
-    
 };
 
 function formatTime(totalSeconds: number) {
@@ -28,6 +28,10 @@ export default function PomodoroPage() {
     const [isRunning, setIsRunning] = useState(false);
     const [completedSessions, setCompletedSessions] = useState(0);
 
+    // Renderizado del modal
+    const [startModal, setStartModal] = useState(false);
+
+    // Funcion para pomodoro
     useEffect(() => {
         if (!isRunning) return;
 
@@ -53,15 +57,44 @@ export default function PomodoroPage() {
         setMode(nextMode);
         setSecondsLeft(DURATIONS[nextMode]);
         setIsRunning(false);
-    } 
+    }
 
     function resetTimer() {
         setIsRunning(false);
         setSecondsLeft(DURATIONS[mode]);
     }
 
+    function handleClickIniciar() {
+        if (isRunning) {
+            setIsRunning(false); // pausar
+            return;
+        }
+
+        if (secondsLeft === DURATIONS[mode]) {
+            setStartModal(true); // aún no ha empezado -> mostrar modal primero
+            return;
+        }
+
+        setIsRunning(true); // ya había empezado antes, solo reanuda
+    }
+
+    function handleIniciarDesdeModal() {
+        setIsRunning(true);
+        setStartModal(false);
+    }
+
     return (
+
         <main className="pomodoro-page">
+
+            {/* El primer modal a cambiar */}
+            {startModal && (
+                <PomodoroStartModal
+                    onClose={() => setStartModal(false)}
+                    onIniciar={handleIniciarDesdeModal}
+                />
+            )}
+
             <header className="pomodoro-header">
                 <div className="pomodoro-eye">
                     <h1>Pomodoro</h1>
@@ -102,7 +135,7 @@ export default function PomodoroPage() {
 
                     <div className="timer-actions">
                         <button className="timer-reset" type="button" onClick={resetTimer}>Reiniciar</button>
-                        <button className="timer-start" type="button" onClick={() => setIsRunning((running) => !running)}>
+                        <button className="timer-start" type="button" onClick={handleClickIniciar}>
                             {isRunning ? "Pausar" : secondsLeft === 0 ? "Empezar de nuevo" : "Iniciar Pomodoro"}
                         </button>
                     </div>

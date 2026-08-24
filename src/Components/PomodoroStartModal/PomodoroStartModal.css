@@ -1,3 +1,16 @@
+/*Inicio estilo de overlay*/
+
+.pomodoro-start-modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Fin de overlay*/
 .pomodoro-start-modal {
     width: min(100%, 460px);
     margin: 48px auto;
@@ -30,6 +43,39 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+/* 
+ESTILO DEL BUTTON
+
+*/
+
+.pomodoro-start-modal__header {
+    position: relative;
+}
+
+.pomodoro-start-modal__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-height: auto;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #667067;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.pomodoro-start-modal__close:hover {
+    background: #eef3ef;
+    color: #27312a;
+    transform: none;
 }
 
 /* 

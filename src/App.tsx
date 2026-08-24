@@ -11,11 +11,11 @@ function App() {
   
   return (
     <div className="app">
-        {<Sidebar cambiarPagina={setPaginaActual} />} 
-        <PomodoroStartModal></PomodoroStartModal>
-{/*         {paginaActual === "tareas" && <TareasPage />}
+        <Sidebar cambiarPagina={setPaginaActual} />
+
+       {paginaActual === "tareas" && <TareasPage />}
         {paginaActual === "nuevaTarea" && <NewTaskPage />}
-        {paginaActual === "pomodoro" && <PomodoroPage />} */}
+        {paginaActual === "pomodoro" && <PomodoroPage />} 
 
     </div>
   );
