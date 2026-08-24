@@ -1,27 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./PomodoroStartModal.css";
-const tasks = [
-    {
-        id: 1,
-        title: "Estudiar React",
-        description: "Repasar useState y useEffect"
-    },
-    {
-        id: 2,
-        title: "Hacer ejercicio",
-        description: "Correr 5 km"
-    },
-    {
-        id: 3,
-        title: "Estudiar Node.js",
-        description: "Repasar Express"
-    }
-];
 
+interface Tarea {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    fecha: string;
+    progreso: number;
+}
 
 export default function PomodoroStartModal() {
     const [busqueda, SetBusqueda ] = useState("");
+    const [tareas, setTareas] = useState<Tarea[]>([]);
 
+        async function fetchTareas() {
+            try {
+                const tareasObtenidas = await window.api.mostrarTareas();
+    
+                console.log("Tareas obtenidas:", tareasObtenidas);
+                setTareas(tareasObtenidas);
+            } catch (err) {
+                console.error("Error al obtener las tareas:", err);
+            }
+        }
+    
+    useEffect(() => {
+            fetchTareas();
+        }, []);
     return (
         
         <section className="pomodoro-start-modal" aria-labelledby="pomodoro-modal-title">
@@ -40,12 +45,12 @@ export default function PomodoroStartModal() {
                     type="text"
                     placeholder="Ej. Terminar el informe"
                 />
-                <p> {busqueda.trim() !== "" &&tasks
+                <p> {busqueda.trim() !== "" && tareas
     .filter(task =>
-        task.title.toLowerCase().includes(busqueda.toLowerCase())
+        task.titulo.toLowerCase().includes(busqueda.toLowerCase())
     )
     .map(task => (
-        <p key={task.id}>{task.title}</p>
+        <p key={task.id}>{task.titulo}</p>
     ))
 }</p>
             </form>
