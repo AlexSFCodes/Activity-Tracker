@@ -1,0 +1,116 @@
+/* Overlay */
+.task-details-modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Contenedor principal */
+.task-details-modal {
+    position: relative;
+    width: min(100%, 420px);
+    margin: 48px auto;
+    padding: clamp(24px, 5vw, 36px);
+    border: 1px solid #d7dfd8;
+    border-radius: 18px;
+    background: #f9f9f9;
+    color: #27312a;
+    box-shadow: 0 16px 40px rgba(40, 60, 44, 0.14);
+    display: grid;
+    gap: 18px;
+}
+
+/* Botón cerrar */
+.task-details-modal__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-height: auto;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #667067;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.task-details-modal__close:hover {
+    background: #eef3ef;
+    color: #27312a;
+}
+
+/* Título */
+.task-details-modal__title {
+    margin: 5px 0 0;
+    color: #314a36;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    line-height: 1.2;
+    padding-right: 24px; /* que no choque con la X */
+}
+
+/* Input */
+.task-details-modal__input {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cbd6cc;
+    border-radius: 9px;
+    outline: none;
+    background: #fff;
+    color: #27312a;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.task-details-modal__input::placeholder {
+    color: #89958b;
+}
+
+.task-details-modal__input:focus {
+    border-color: #39783b;
+    box-shadow: 0 0 0 3px rgba(57, 120, 59, 0.16);
+}
+
+/* Botón primario */
+.task-details-modal__primary {
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 9px;
+    border: 1px solid #39783b;
+    background: #39783b;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.task-details-modal__primary:hover {
+    border-color: #306632;
+    background: #306632;
+    transform: translateY(-1px);
+}
+
+.task-details-modal__primary:focus-visible {
+    outline: 3px solid rgba(57, 120, 59, 0.28);
+    outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+    .task-details-modal {
+        margin: 24px 16px;
+        width: auto;
+    }
+}

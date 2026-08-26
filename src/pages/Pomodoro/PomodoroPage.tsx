@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./PomodoroPage.css";
 import PomodoroStartModal from "../../Components/PomodoroStartModal/PomodoroStartModal"
-
+import TaskDetailsModal from "../../Components/TaskDetailModal/TaskDetailsModal"
 type PomodoroMode = "focus" | "shortBreak" | "longBreak";
 
 const DURATIONS: Record<PomodoroMode, number> = {
@@ -71,7 +71,7 @@ export default function PomodoroPage() {
         }
 
         if (secondsLeft === DURATIONS[mode]) {
-            setStartModal(true); // aún no ha empezado -> mostrar modal primero
+            setStartModal(true); // aun no ha empezado -> mostrar modal primero
             return;
         }
 
@@ -86,7 +86,7 @@ export default function PomodoroPage() {
     return (
 
         <main className="pomodoro-page">
-
+            <TaskDetailsModal/>
             {/* El primer modal a cambiar */}
             {startModal && (
                 <PomodoroStartModal
