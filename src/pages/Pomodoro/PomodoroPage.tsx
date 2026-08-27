@@ -28,8 +28,13 @@ export default function PomodoroPage() {
     const [isRunning, setIsRunning] = useState(false);
     const [completedSessions, setCompletedSessions] = useState(0);
 
-    // Renderizado del modal
+    // Renderizado de modales
+    // MODAL ANTES DE INICIAR POMODORO
     const [startModal, setStartModal] = useState(false);
+
+    //MODAL DESPUEES DEL PRIMER MODAL
+    const [taskDetails, setTaskDetails] = useState(false);
+
 
     // Funcion para pomodoro
     useEffect(() => {
@@ -86,7 +91,8 @@ export default function PomodoroPage() {
     return (
 
         <main className="pomodoro-page">
-            <TaskDetailsModal/>
+            {/*EL SEGUNDO MODAL A CAMBIAR */}
+            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)}/>}
             {/* El primer modal a cambiar */}
             {startModal && (
                 <PomodoroStartModal

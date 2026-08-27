@@ -11,7 +11,7 @@ interface Tarea {
 
 interface PomodoroStartModalProps {
     onClose: () => void;
-    onIniciar: () => void;
+    onIniciar: (task?: Tarea) => void;
 }
 export default function PomodoroStartModal({ onClose, onIniciar }: PomodoroStartModalProps) {
     const [busqueda, setBusqueda] = useState("");
