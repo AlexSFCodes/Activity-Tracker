@@ -2,8 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import "./PomodoroPage.css";
 import PomodoroStartModal from "../../Components/PomodoroStartModal/PomodoroStartModal"
 import TaskDetailsModal from "../../Components/TaskDetailModal/TaskDetailsModal"
-type PomodoroMode = "focus" | "shortBreak" | "longBreak";
 
+//EL MODO DE POMODORO typos lo que puede ser esa variable 
+type PomodoroMode = "focus" | "shortBreak" | "longBreak";
+interface Tarea {
+    id: number;
+    titulo: string;
+    descripcion: string;
+    fecha: string;
+    progreso: number;
+}
 const DURATIONS: Record<PomodoroMode, number> = {
     focus: 25 * 60,
     shortBreak: 5 * 60,
@@ -28,6 +36,8 @@ export default function PomodoroPage() {
     const [isRunning, setIsRunning] = useState(false);
     const [completedSessions, setCompletedSessions] = useState(0);
 
+    //tarea mandada desde el modal
+    const [selectedTask, setSelectedTask] = useState<Tarea | undefined>(undefined);
     // Renderizado de modales
     // MODAL ANTES DE INICIAR POMODORO
     const [startModal, setStartModal] = useState(false);
@@ -65,8 +75,10 @@ export default function PomodoroPage() {
     }
 
     function resetTimer() {
+
         setIsRunning(false);
         setSecondsLeft(DURATIONS[mode]);
+        
     }
 
     function handleClickIniciar() {
@@ -122,8 +134,7 @@ export default function PomodoroPage() {
                                 type="button"
                                 role="tab"
                                 aria-selected={mode === item}
-                                onClick={() => changeMode(item)}
-                            >
+                                onClick={() => changeMode(item)}>
                                 {MODE_LABELS[item]}
                             </button>
                         ))}
@@ -141,6 +152,7 @@ export default function PomodoroPage() {
 
                     <div className="timer-actions">
                         <button className="timer-reset" type="button" onClick={resetTimer}>Reiniciar</button>
+                    
                         <button className="timer-start" type="button" onClick={handleClickIniciar}>
                             {isRunning ? "Pausar" : secondsLeft === 0 ? "Empezar de nuevo" : "Iniciar Pomodoro"}
                         </button>

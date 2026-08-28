@@ -70,7 +70,7 @@ export default function PomodoroStartModal({ onClose, onIniciar }: PomodoroStart
                                     <button
                                         type="button"
                                         className="pomodoro-start-modal__choose"
-                                        onClick={onIniciar}
+                                        onClick={() => onIniciar(task)}
                                     >
                                         Escoger
                                     </button>
@@ -91,7 +91,7 @@ export default function PomodoroStartModal({ onClose, onIniciar }: PomodoroStart
                     <button
                         className="pomodoro-start-modal__secondary"
                         type="button"
-                        onClick={onIniciar}
+                        onClick={() => onIniciar()}
                     >
                         Iniciar sesión libre
                     </button>
