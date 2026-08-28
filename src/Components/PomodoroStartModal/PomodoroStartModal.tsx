@@ -16,6 +16,7 @@ interface PomodoroStartModalProps {
 export default function PomodoroStartModal({ onClose, onIniciar }: PomodoroStartModalProps) {
     const [busqueda, setBusqueda] = useState("");
     const [tareas, setTareas] = useState<Tarea[]>([]);
+
     async function fetchTareas() {
         try {
             const tareasObtenidas = await window.api.mostrarTareas();

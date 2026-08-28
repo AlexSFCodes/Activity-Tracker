@@ -42,6 +42,7 @@ export default function PomodoroPage() {
     // MODAL ANTES DE INICIAR POMODORO
     const [startModal, setStartModal] = useState(false);
 
+
     //MODAL DESPUEES DEL PRIMER MODAL
     const [taskDetails, setTaskDetails] = useState(false);
 
@@ -95,7 +96,12 @@ export default function PomodoroPage() {
         setIsRunning(true); // ya había empezado antes, solo reanuda
     }
 
-    function handleIniciarDesdeModal() {
+    function handleIniciarDesdeModal(task?:Tarea) {
+        if(task){
+            setTaskDetails(true);
+            console.log("Vos elegiste "+task.titulo);
+            setSelectedTask(task);
+        }
         setIsRunning(true);
         setStartModal(false);
     }
@@ -126,6 +132,7 @@ export default function PomodoroPage() {
 
             <section className="pomodoro-layout" aria-label="Temporizador Pomodoro">
                 <div className="timer-card">
+                        {selectedTask?.titulo ? selectedTask?.titulo : "No se ha seleccionado tarea" }
                     <div className="mode-tabs" role="tablist" aria-label="Modo del temporizador">
                         {(Object.keys(MODE_LABELS) as PomodoroMode[]).map((item) => (
                             <button
