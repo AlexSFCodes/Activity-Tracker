@@ -38,6 +38,8 @@ export default function PomodoroPage() {
 
     //tarea mandada desde el modal
     const [selectedTask, setSelectedTask] = useState<Tarea | undefined>(undefined);
+    //descripcion mandada desde el modal
+    const [descripcion, setDescripcion] = useState<string>("");
     // Renderizado de modales
     // MODAL ANTES DE INICIAR POMODORO
     const [startModal, setStartModal] = useState(false);
@@ -101,16 +103,22 @@ export default function PomodoroPage() {
             setTaskDetails(true);
             console.log("Vos elegiste "+task.titulo);
             setSelectedTask(task);
-        }
+            setStartModal(false);
+        }else{
         setIsRunning(true);
-        setStartModal(false);
+        setStartModal(false)};
+    }
+    function handleIniciarTareaElegida(descripcionTarea:string){
+        setTaskDetails(false);
+        setDescripcion(descripcionTarea);
+        setIsRunning(true);
     }
 
     return (
 
         <main className="pomodoro-page">
             {/*EL SEGUNDO MODAL A CAMBIAR */}
-            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)}/>}
+            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)} onIniciaar={handleIniciarTareaElegida}/>}
             {/* El primer modal a cambiar */}
             {startModal && (
                 <PomodoroStartModal
@@ -133,6 +141,7 @@ export default function PomodoroPage() {
             <section className="pomodoro-layout" aria-label="Temporizador Pomodoro">
                 <div className="timer-card">
                         {selectedTask?.titulo ? selectedTask?.titulo : "No se ha seleccionado tarea" }
+                        {descripcion==="" ? <div>No hay descripcion</div> : <div>{descripcion}</div>}
                     <div className="mode-tabs" role="tablist" aria-label="Modo del temporizador">
                         {(Object.keys(MODE_LABELS) as PomodoroMode[]).map((item) => (
                             <button
