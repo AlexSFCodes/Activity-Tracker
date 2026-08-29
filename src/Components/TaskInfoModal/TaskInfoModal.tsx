@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./TaskInfoModal.css";
 
 interface Tarea {
@@ -7,13 +8,30 @@ interface Tarea {
     fecha: string;
     progreso: number;
 }
-
+interface Sesion {
+    id: number,
+    tarea_id: number,
+    tiempo: number,
+    logro: string,
+    fecha: string
+}
 interface TaskInfoModalProps {
     OnClose: () => void;
     Task: Tarea;
 }
 
 function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
+    const [sesiones, setSesiones] = useState<Sesion[]>([]);
+    useEffect(() => {
+        const obtenerSesiones = async () => {
+            console.log("La tarea seleccionada es: ", Task.id);
+            const sesiones = await window.api.sesionesTarea(Task.id);
+            setSesiones(sesiones);
+            console.log("Sesiones encontradas: ", sesiones);
+        };
+
+        obtenerSesiones();
+    }, [Task.id]);
     return (
         <div className="task-info-modal__overlay">
             <div className="task-info-modal">
@@ -58,13 +76,14 @@ function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
                         <div className="task-info-modal__sessions-header">
                             <h3>Sesiones dedicadas</h3>
                         </div>
-
-                        <ul>
-                            <li>
-                                <span>Sesion 1</span>
-                                <small>25 min</small>
-                            </li>
-                        </ul>
+                        {
+                            sesiones.map((sesion) => (
+                                <li key={sesion.id}>
+                                    <span>Objetivo: {sesion.logro}</span>
+                                    <small>Tiempo dedicado:{sesion.tiempo} min</small>
+                                </li>
+                            ))
+                        }
                     </div>
                 </div>
             </div>

@@ -1,12 +1,16 @@
 import "./TaskCard.css";
 import { Tarea } from "../../types/Tarea"; // ajusta la ruta a donde la pongas
+import { useEffect } from "react";
 
 interface TaskCardProps {
     tarea: Tarea;
     onSeleccion: (tarea: Tarea) => void;
 }
 
+
+
 export default function TaskCard({ tarea, onSeleccion }: TaskCardProps) {
+
     return (
         <article className="task-card">
             <div className="task-card-content">

@@ -81,7 +81,7 @@ export default function PomodoroPage() {
 
         setIsRunning(false);
         setSecondsLeft(DURATIONS[mode]);
-        
+
     }
 
     function handleClickIniciar() {
@@ -98,16 +98,17 @@ export default function PomodoroPage() {
         setIsRunning(true); // ya había empezado antes, solo reanuda
     }
 
-    function handleIniciarDesdeModal(task?:Tarea) {
-        if(task){
+    function handleIniciarDesdeModal(task?: Tarea) {
+        if (task) {
             setTaskDetails(true);
-            console.log("Vos elegiste "+task.titulo);
+            console.log("Vos elegiste " + task.titulo);
             setSelectedTask(task);
             setStartModal(false);
-           // const nuevaTarea = await window.api.crearSesion(task.titulo, descripcion);
-        }else{
-        setIsRunning(true);
-        setStartModal(false)};
+            // const nuevaTarea = await window.api.crearSesion(task.titulo, descripcion);
+        } else {
+            setIsRunning(true);
+            setStartModal(false)
+        };
     }
     async function handleIniciarTareaElegida(descripcionTarea: string) {
         setTaskDetails(false);
@@ -118,7 +119,7 @@ export default function PomodoroPage() {
             selectedTask.id,
             descripcionTarea
         );
-        console.log("Se creo sesion con id "+ nuevaSesion.id)
+        console.log("Se creo sesion con id " + nuevaSesion.id)
         setIsRunning(true);
     }
 
@@ -126,7 +127,7 @@ export default function PomodoroPage() {
 
         <main className="pomodoro-page">
             {/*EL SEGUNDO MODAL A CAMBIAR */}
-            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)} onIniciaar={handleIniciarTareaElegida}/>}
+            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)} onIniciaar={handleIniciarTareaElegida} />}
             {/* El primer modal a cambiar */}
             {startModal && (
                 <PomodoroStartModal
@@ -148,8 +149,9 @@ export default function PomodoroPage() {
 
             <section className="pomodoro-layout" aria-label="Temporizador Pomodoro">
                 <div className="timer-card">
-                        {selectedTask?.titulo ? selectedTask?.titulo : "No se ha seleccionado tarea" }
-                        {descripcion==="" ? <div>No hay descripcion</div> : <div>{descripcion}</div>}
+                    {selectedTask?.titulo ? selectedTask?.titulo : "No se ha seleccionado tarea"}
+                    {descripcion === "" ? <div>No hay descripcion</div> : <div>{descripcion}</div>}
+                    {selectedTask?.id ? <div>ID de la tarea: {selectedTask.id}</div> : null} {/*borrar esto */}
                     <div className="mode-tabs" role="tablist" aria-label="Modo del temporizador">
                         {(Object.keys(MODE_LABELS) as PomodoroMode[]).map((item) => (
                             <button
@@ -176,7 +178,7 @@ export default function PomodoroPage() {
 
                     <div className="timer-actions">
                         <button className="timer-reset" type="button" onClick={resetTimer}>Reiniciar</button>
-                    
+
                         <button className="timer-start" type="button" onClick={handleClickIniciar}>
                             {isRunning ? "Pausar" : secondsLeft === 0 ? "Empezar de nuevo" : "Iniciar Pomodoro"}
                         </button>

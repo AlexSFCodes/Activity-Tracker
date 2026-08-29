@@ -19,6 +19,11 @@ ipcMain.handle("tarea:listar", () => {
   return db.prepare("SELECT * FROM tarea ORDER BY id DESC").all();
 });
 
+//HANDLER PARA OBTENER SESIONES DE ESTUDIO RELACIONADAS A UNA TAREA 
+ipcMain.handle("pomodoro:sesion", (_event, tareaId) => {
+  return db.prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC").all(tareaId);
+});
+
 //HANDLER PARA CARGAR TODOS LOS CICLOS POMODOROS RELACIONADOS A LA TAREA
 ipcMain.handle("pomodoro:listar", (_event, tareaId) => {
   return db
@@ -32,7 +37,7 @@ ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
     "INSERT INTO tarea (titulo, descripcion, fecha) VALUES (?, ?, ?)"
   );
   const date = new Date().toISOString();
-  const info = stmt.run(titulo, descripcion,date);
+  const info = stmt.run(titulo, descripcion, date);
   return { id: info.lastInsertRowid };
 });
 
@@ -46,7 +51,7 @@ ipcMain.handle("pomodoro:insertar", (_event, tarea_id: number, descripcion: stri
   const tiempo = 0;
   const info = stmt.run(tarea_id, tiempo, date, descripcion);
   return { id: info.lastInsertRowid };
-  
+
 });
 
 
