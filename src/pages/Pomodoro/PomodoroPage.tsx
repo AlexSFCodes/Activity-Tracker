@@ -104,13 +104,16 @@ export default function PomodoroPage() {
             console.log("Vos elegiste "+task.titulo);
             setSelectedTask(task);
             setStartModal(false);
+           // const nuevaTarea = await window.api.crearSesion(task.titulo, descripcion);
         }else{
         setIsRunning(true);
         setStartModal(false)};
     }
-    function handleIniciarTareaElegida(descripcionTarea:string){
+    async function handleIniciarTareaElegida(descripcionTarea:string){
         setTaskDetails(false);
         setDescripcion(descripcionTarea);
+        selectedTask
+        const nuevaSesion = await window.api.crearSesion(selectedTask?.id, descripcion);
         setIsRunning(true);
     }
 

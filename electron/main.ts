@@ -36,6 +36,17 @@ ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
   return { id: info.lastInsertRowid };
 });
 
+//HANDELER PARA JOIN EN POMODORO
+
+ipcMain.handle("pomodoro:insertar",(_event, tarea_id, descripcion)=>{
+  const stmt = db.prepare("INSERT INTO pomodoro (tarea_id, tiempo, fecha, logro) VALUE(?, ?, ?, ?)");
+  const date = new Date().toISOString;
+  const tiempo = 0;
+  const info = stmt.run(tarea_id,tiempo,date,descripcion);
+  return { id: info.lastInsertRowid};
+});
+
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
