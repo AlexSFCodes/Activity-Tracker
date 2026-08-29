@@ -1,35 +1,17 @@
 import TaskCard from "./TaskCard";
 import "./TareasPage.css";
+import TaskInfoModal from "../../Components/TaskInfoModal/TaskInfoModal";
 import { useEffect, useState } from "react";
-export {};
-
-interface Tarea {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha: string;
-    progreso: number;
-}
-
-declare global {
-  interface Window {
-    api: {
-      crearTarea: (
-        titulo: string,
-        descripcion: string
-      ) => Promise<{ id: number }>;
-      mostrarTareas: () => Promise<Tarea[]>;
-    };
-  }
-}
+import { Tarea } from "../../types/Tarea";
 
 export default function TareasPage() {
     const [tareas, setTareas] = useState<Tarea[]>([]);
+    // Tarea seleccionada por el usuario (y controla si el modal se abre)
+    const [tareaSeleccionada, setTareaSeleccionada] = useState<Tarea | null>(null);
 
     async function fetchTareas() {
         try {
             const tareasObtenidas = await window.api.mostrarTareas();
-
             console.log("Tareas obtenidas:", tareasObtenidas);
             setTareas(tareasObtenidas);
         } catch (err) {
@@ -41,8 +23,22 @@ export default function TareasPage() {
         fetchTareas();
     }, []);
 
+    function handleSeleccion(tarea: Tarea) {
+        setTareaSeleccionada(tarea);
+    }
+
+    function handleCerrarModal() {
+        setTareaSeleccionada(null);
+    }
+
     return (
         <main className="tareas-page">
+            {tareaSeleccionada && (
+                <TaskInfoModal
+                    Task={tareaSeleccionada}
+                    OnClose={handleCerrarModal}
+                />
+            )}
             <section className="tareas-container">
                 <header className="tareas-header">
                     <h1>Mis tareas</h1>
@@ -53,10 +49,8 @@ export default function TareasPage() {
                     {tareas.map((tarea) => (
                         <TaskCard
                             key={tarea.id}
-                            title={tarea.titulo}
-                            description={tarea.descripcion}
-                            creationDate={tarea.fecha}
-                            progress={tarea.progreso}
+                            tarea={tarea}
+                            onSeleccion={handleSeleccion}
                         />
                     ))}
                 </div>

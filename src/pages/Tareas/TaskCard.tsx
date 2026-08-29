@@ -1,45 +1,44 @@
 import "./TaskCard.css";
+import { Tarea } from "../../types/Tarea"; // ajusta la ruta a donde la pongas
 
 interface TaskCardProps {
-    title: string;
-    description: string;
-    creationDate: string;
-    progress: number;
+    tarea: Tarea;
+    onSeleccion: (tarea: Tarea) => void;
 }
 
-export default function TaskCard({
-    title,
-    description,
-    creationDate,
-    progress,
-}: TaskCardProps) {
+export default function TaskCard({ tarea, onSeleccion }: TaskCardProps) {
     return (
         <article className="task-card">
             <div className="task-card-content">
-                <h2>{title}</h2>
+                <h2>{tarea.titulo}</h2>
 
                 <p className="task-description">
-                    {description}
+                    {tarea.descripcion}
                 </p>
 
                 <p className="task-date">
-                    Creada: {creationDate}
+                    Creada: {tarea.fecha}
                 </p>
             </div>
 
             <div className="task-progress">
                 <div className="task-progress-header">
                     <span>Progreso</span>
-                    <span>{progress}%</span>
+                    <span>{tarea.progreso}%</span>
                 </div>
 
                 <div className="progress-bar">
                     <div
                         className="progress-bar-fill"
-                        style={{ width: `${progress}%` }}
+                        style={{ width: `${tarea.progreso}%` }}
                     />
                 </div>
-                <button className="btn bt n-primary"> Ver detalles </button>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => onSeleccion(tarea)}
+                >
+                    Ver detalles
+                </button>
             </div>
         </article>
     );

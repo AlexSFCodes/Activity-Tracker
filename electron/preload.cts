@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("tarea:crear", titulo, descripcion),
   mostrarTareas: () => 
     ipcRenderer.invoke("tarea:listar"),
-  crearSesion: (tarea_id:Number, descripcion:string) =>
-    ipcRenderer.invoke("pomodoro:insertar", tarea_id, descripcion),
+crearSesion: (tarea_id: number, descripcion: string) =>
+  ipcRenderer.invoke("pomodoro:insertar", tarea_id, descripcion),
+  
 });
