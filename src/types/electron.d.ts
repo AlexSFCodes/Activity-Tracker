@@ -17,7 +17,7 @@ declare global {
       ) => Promise<{ id: number }>;
       mostrarTareas: () => Promise<Tarea[]>;
       crearSesion:(
-        tarea_id:Number, 
+        tarea_id:number, 
         descripcion:string
       )=>  Promise<{ id: number }>;
     };
