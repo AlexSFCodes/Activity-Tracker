@@ -14,21 +14,18 @@ const isDev = !app.isPackaged;
 HANDLERS DE IPC PARA COMUNICACION ENTRE PROCESOS
 
 */
+/*
+ AQUI ESTAN LOS HANDLERS PARA LA TABLA DE TAREAS
+
+*/
+//HANDLER PARA BORRAR TAREAS
+ipcMain.handle("tarea:borrar", (_event, tareaId) => {
+  return db.prepare("DELETE FROM tarea WHERE id = ?").run(tareaId);
+});
+
 //HANDLER PARA LISTAR TAREAS
 ipcMain.handle("tarea:listar", () => {
   return db.prepare("SELECT * FROM tarea ORDER BY id DESC").all();
-});
-
-//HANDLER PARA OBTENER SESIONES DE ESTUDIO RELACIONADAS A UNA TAREA 
-ipcMain.handle("pomodoro:sesion", (_event, tareaId) => {
-  return db.prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC").all(tareaId);
-});
-
-//HANDLER PARA CARGAR TODOS LOS CICLOS POMODOROS RELACIONADOS A LA TAREA
-ipcMain.handle("pomodoro:listar", (_event, tareaId) => {
-  return db
-    .prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC")
-    .all(tareaId);
 });
 
 //HANDER PARA JOIN DE LAS TAREAS
@@ -41,6 +38,19 @@ ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
   return { id: info.lastInsertRowid };
 });
 
+
+/*
+ AQUI ESTAN LOS HANDLERS PARA LA TABLA DE POMODORO O SESIONES DE ESTUDIO
+
+*/
+
+//HANDLER PARA OBTENER SESIONES DE ESTUDIO RELACIONADAS A UNA TAREA 
+ipcMain.handle("pomodoro:sesion", (_event, tareaId) => {
+  return db.prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC").all(tareaId);
+});
+
+
+
 //HANDELER PARA JOIN EN POMODORO
 
 ipcMain.handle("pomodoro:insertar", (_event, tarea_id: number, descripcion: string) => {
@@ -52,6 +62,11 @@ ipcMain.handle("pomodoro:insertar", (_event, tarea_id: number, descripcion: stri
   const info = stmt.run(tarea_id, tiempo, date, descripcion);
   return { id: info.lastInsertRowid };
 
+});
+
+// HANDLER PARA ACTUALIZAR EL CAMPO TIEMPO DE UNA SESION POMODORO 
+ipcMain.handle("pomodoro:actualizarTiempo", (_event, sesionId, tiempo) => {
+  return db.prepare("UPDATE pomodoro SET tiempo = ? WHERE id = ?").run(tiempo, sesionId);
 });
 
 

@@ -28,6 +28,9 @@ declare global {
         descripcion: string
       ) => Promise<{ id: number }>;
       sesionesTarea: (tarea_id: number) => Promise<Sesion[]>;
+
+      borrarTarea: (tareaId: number) => Promise<void>;
+      actualizarTiempoSesion: (sesionId: number, tiempo: number) => Promise<{ id: number }>;
     };
   }
 }

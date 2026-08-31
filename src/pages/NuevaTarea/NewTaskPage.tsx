@@ -7,6 +7,15 @@ export default function NewTaskPage() {
     const [enviando, setEnviando] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    //crear los pasos
+    const [pasos, setPasos] = useState<number[]>([]);
+    function agregarPaso() {
+        setPasos([...pasos, Date.now()]);
+    }
+    function eliminarPaso(id: number) {
+        setPasos(pasos.filter(p => p !== id));
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // evita que el form recargue la página
 
@@ -62,7 +71,7 @@ export default function NewTaskPage() {
                             placeholder="¿Qué quieres lograr?"
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
-                            
+
                         />
                     </div>
 
@@ -80,6 +89,23 @@ export default function NewTaskPage() {
                             value={descripcion}
                             onChange={(e) => setDescripcion(e.target.value)}
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="pasos">Pasos sugeridos</label>
+                        <div id="pasos" className="pasos-container">
+                            {pasos.map((p) => (
+                                <div key={p} className="paso-item">
+                                    <input className="form-input paso-input" type="text" placeholder="Ej: Investigar sobre el tema" />
+                                    <button type="button" className="btn-eliminar-paso" onClick={() => eliminarPaso(p)} title="Eliminar paso">
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
+                            <button className="btn btn-paso" type="button" onClick={agregarPaso}>
+                                + Agregar paso
+                            </button>
+                        </div>
                     </div>
 
                     {error && <p className="form-error">  {error}</p>}
@@ -102,7 +128,7 @@ export default function NewTaskPage() {
                     </div>
                 </form>
             </section>
-            
+
             <section
                 className="plan-sugerido"
                 aria-labelledby="plan-title"

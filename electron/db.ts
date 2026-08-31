@@ -33,4 +33,14 @@ db.exec(`
     tiempo_descanso REAL NOT NULL DEFAULT 5,
     tema TEXT NOT NULL DEFAULT 'oscuro' CHECK (tema IN ('claro', 'oscuro'))
   );
+
+  CREATE TABLE IF NOT EXISTS paso (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tarea_id INTEGER NOT NULL,
+    titulo TEXT NOT NULL,
+    descripcion TEXT,
+    completado INTEGER DEFAULT 0,
+    orden INTEGER NOT NULL,
+    FOREIGN KEY (tarea_id) REFERENCES tarea(id) ON DELETE CASCADE
+  );
 `);

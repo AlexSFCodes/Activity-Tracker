@@ -169,6 +169,62 @@
 
 
 /* ==============================
+   Pasos sugeridos
+   ============================== */
+
+.pasos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.paso-input {
+    width: 100%;
+}
+
+.btn-paso {
+    align-self: flex-start;
+    background-color: transparent;
+    border: 1px dashed #aaa;
+    color: #6b7f6e;
+    font-size: 0.9em;
+    padding: 8px 16px;
+    margin-top: 4px;
+}
+
+.btn-paso:hover {
+    background-color: #e8f0e9;
+    color: #39783b;
+    border-color: #8DAA91;
+}
+
+.paso-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.paso-item .paso-input {
+    flex: 1;
+}
+
+.btn-eliminar-paso {
+    background: none;
+    border: none;
+    color: #e57373;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.btn-eliminar-paso:hover {
+    transform: scale(1.2);
+    color: #d32f2f;
+}
+
+/* ==============================
    Accesibilidad
    ============================== */
 

@@ -1,6 +1,9 @@
 /*Colores   #8DAA91*/
 .sidebar{
     width: 260px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
     border-right: 1px solid #ccc;
     box-shadow: 3px 0px 1px rgba(0, 0, 0, 0.1);
     display: flex;
