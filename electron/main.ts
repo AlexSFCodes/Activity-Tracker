@@ -69,6 +69,19 @@ ipcMain.handle("pomodoro:actualizarTiempo", (_event, sesionId, tiempo) => {
   return db.prepare("UPDATE pomodoro SET tiempo = ? WHERE id = ?").run(tiempo, sesionId);
 });
 
+// HANDLER PARA CREAR UN PASO
+ipcMain.handle("paso:crear", (_event, tarea_id: number, titulo: string, orden: number, completado: number = 0) => {
+  const stmt = db.prepare(
+    "INSERT INTO paso (tarea_id, titulo, completado, orden) VALUES (?, ?, ?, ?)"
+  );
+  const info = stmt.run(tarea_id, titulo, completado, orden);
+  return { id: info.lastInsertRowid };
+});
+
+// HANDLER PARA OBTENER PASOS DE UNA TAREA
+ipcMain.handle("paso:listarPorTarea", (_event, tarea_id: number) => {
+  return db.prepare("SELECT * FROM paso WHERE tarea_id = ? ORDER BY orden ASC").all(tarea_id);
+});
 
 function createWindow() {
   const win = new BrowserWindow({

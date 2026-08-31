@@ -38,7 +38,6 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     tarea_id INTEGER NOT NULL,
     titulo TEXT NOT NULL,
-    descripcion TEXT,
     completado INTEGER DEFAULT 0,
     orden INTEGER NOT NULL,
     FOREIGN KEY (tarea_id) REFERENCES tarea(id) ON DELETE CASCADE

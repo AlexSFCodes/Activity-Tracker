@@ -15,6 +15,13 @@ interface Sesion {
     logro: string,
     fecha: string
 }
+interface Paso {
+    id: number;
+    tarea_id: number;
+    titulo: string;
+    completado: number;
+    orden: number;
+}
 interface TaskInfoModalProps {
     OnClose: () => void;
     Task: Tarea;
@@ -22,16 +29,28 @@ interface TaskInfoModalProps {
 
 function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
     const [sesiones, setSesiones] = useState<Sesion[]>([]);
+    const [pasos, setPasos] = useState<Paso[]>([]);
+
     useEffect(() => {
-        const obtenerSesiones = async () => {
-            console.log("La tarea seleccionada es: ", Task.id);
-            const sesiones = await window.api.sesionesTarea(Task.id);
-            setSesiones(sesiones);
-            console.log("Sesiones encontradas: ", sesiones);
+        const obtenerDatos = async () => {
+            const sesionesData = await window.api.sesionesTarea(Task.id);
+            setSesiones(sesionesData);
+
+            const pasosData = await window.api.listarPasosTarea(Task.id);
+            setPasos(pasosData);
         };
 
-        obtenerSesiones();
+        obtenerDatos();
     }, [Task.id]);
+
+    const handleDelete = async () => {
+        if (confirm("¿Estás seguro de que quieres eliminar esta tarea? Todas sus sesiones y pasos se borrarán para siempre.")) {
+            await window.api.borrarTarea(Task.id);
+            OnClose();
+            window.location.reload(); // Recargar para actualizar la lista de tareas
+        }
+    };
+
     return (
         <div className="task-info-modal__overlay">
             <div className="task-info-modal">
@@ -62,16 +81,40 @@ function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
                     <div className="task-info-modal__stats">
                         <div>
                             <span>Progreso</span>
-                            <strong>0%</strong>
+                            <strong>
+                                {pasos.length > 0
+                                    ? Math.round((pasos.filter(p => p.completado === 1).length / pasos.length) * 100)
+                                    : Task.progreso}%
+                            </strong>
                         </div>
                         <div>
                             <span>Sesiones</span>
-                            <strong>0</strong>
+                            <strong>{sesiones.length}</strong>
                         </div>
                     </div>
-                    <button type="button" className="task-info-modal__delete-btn">
+                    <button type="button" className="task-info-modal__delete-btn" onClick={handleDelete}>
                         Eliminar Tarea
                     </button>
+                    <div className="task-info-modal__sessions">
+                        <div className="task-info-modal__sessions-header">
+                            <h3>Pasos sugeridos</h3>
+                        </div>
+                        <ul className="task-info-modal__steps-list">
+                            {pasos.length > 0 ? (
+                                pasos.map((paso) => (
+                                    <li key={paso.id} className="task-info-modal__step-item">
+                                        <input type="checkbox" checked={paso.completado === 1} readOnly />
+                                        <span style={{ textDecoration: paso.completado === 1 ? 'line-through' : 'none', color: paso.completado === 1 ? '#999' : 'inherit' }}>
+                                            {paso.titulo}
+                                        </span>
+                                    </li>
+                                ))
+                            ) : (
+                                <p style={{ fontSize: '0.9rem', color: '#666', margin: 0 }}>No hay pasos registrados.</p>
+                            )}
+                        </ul>
+                    </div>
+
                     <div className="task-info-modal__sessions">
                         <div className="task-info-modal__sessions-header">
                             <h3>Sesiones dedicadas</h3>

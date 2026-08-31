@@ -15,6 +15,14 @@ interface Sesion {
   fecha: string
 }
 
+interface Paso {
+  id: number;
+  tarea_id: number;
+  titulo: string;
+  completado: number;
+  orden: number;
+}
+
 declare global {
   interface Window {
     api: {
@@ -31,6 +39,13 @@ declare global {
 
       borrarTarea: (tareaId: number) => Promise<void>;
       actualizarTiempoSesion: (sesionId: number, tiempo: number) => Promise<{ id: number }>;
+      crearPaso: (
+        tarea_id: number,
+        titulo: string,
+        orden: number,
+        completado?: number
+      ) => Promise<{ id: number }>;
+      listarPasosTarea: (tarea_id: number) => Promise<Paso[]>;
     };
   }
 }

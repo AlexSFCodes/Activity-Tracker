@@ -13,4 +13,8 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("tarea:borrar", tareaId),
   actualizarTiempoSesion: (sesionId: number, tiempo: number) =>
     ipcRenderer.invoke("pomodoro:actualizarTiempo", sesionId, tiempo),
+  crearPaso: (tarea_id: number, titulo: string, orden: number, completado: number = 0) =>
+    ipcRenderer.invoke("paso:crear", tarea_id, titulo, orden, completado),
+  listarPasosTarea: (tarea_id: number) =>
+    ipcRenderer.invoke("paso:listarPorTarea", tarea_id),
 });
