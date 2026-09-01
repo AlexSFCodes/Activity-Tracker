@@ -50,7 +50,6 @@ ipcMain.handle("pomodoro:sesion", (_event, tareaId) => {
 });
 
 
-
 //HANDELER PARA JOIN EN POMODORO
 
 ipcMain.handle("pomodoro:insertar", (_event, tarea_id: number, descripcion: string) => {
@@ -83,6 +82,20 @@ ipcMain.handle("paso:listarPorTarea", (_event, tarea_id: number) => {
   return db.prepare("SELECT * FROM paso WHERE tarea_id = ? ORDER BY orden ASC").all(tarea_id);
 });
 
+/*
+    AQUI ESTAN LOS HANDLERS PARA TABLA PASO
+
+*/
+
+//HANDLER PARA SETTEAR PASO COMPLETADO O NO 
+
+ipcMain.handle("paso:actualizarCompletado", (_event, pasoId: number, tareaid:number) => {
+  const resultado = db.prepare(`UPDATE paso SET completado = CASE WHEN completado = 1 THEN 0 ELSE 1 END WHERE id = ?`).run(pasoId);
+  return resultado.changes;
+});
+
+
+//Funcion para crear la ventana principal de la aplicacion
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,

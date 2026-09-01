@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import "./PomodoroStartModal.css";
-
-interface Tarea {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha: string;
-    progreso: number;
-}
+import type { Tarea } from "../../types";
 
 interface PomodoroStartModalProps {
     onClose: () => void;

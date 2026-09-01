@@ -17,4 +17,6 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("paso:crear", tarea_id, titulo, orden, completado),
   listarPasosTarea: (tarea_id: number) =>
     ipcRenderer.invoke("paso:listarPorTarea", tarea_id),
+  actualizarPasoCompletado: (pasoId: number, tareaId: number) =>
+    ipcRenderer.invoke("paso:actualizarCompletado", pasoId, tareaId),
 });

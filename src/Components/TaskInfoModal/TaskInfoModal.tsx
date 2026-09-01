@@ -1,27 +1,6 @@
 import { useEffect, useState } from "react";
 import "./TaskInfoModal.css";
-
-interface Tarea {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha: string;
-    progreso: number;
-}
-interface Sesion {
-    id: number,
-    tarea_id: number,
-    tiempo: number,
-    logro: string,
-    fecha: string
-}
-interface Paso {
-    id: number;
-    tarea_id: number;
-    titulo: string;
-    completado: number;
-    orden: number;
-}
+import type { Paso, Sesion, Tarea } from "../../types";
 interface TaskInfoModalProps {
     OnClose: () => void;
     Task: Tarea;
@@ -35,8 +14,10 @@ function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
         const obtenerDatos = async () => {
             const sesionesData = await window.api.sesionesTarea(Task.id);
             setSesiones(sesionesData);
-
+            console.log("Esto es las sesiones "+ sesionesData);
+            console.log(sesionesData)
             const pasosData = await window.api.listarPasosTarea(Task.id);
+            console.log(pasosData);
             setPasos(pasosData);
         };
 

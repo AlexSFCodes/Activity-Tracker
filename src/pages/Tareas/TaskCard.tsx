@@ -1,5 +1,5 @@
 import "./TaskCard.css";
-import { Tarea } from "../../types/Tarea"; // ajusta la ruta a donde la pongas
+import type { Tarea } from "../../types";
 import { useEffect } from "react";
 
 interface TaskCardProps {

@@ -12,7 +12,7 @@
 
 .task-info-modal {
     position: relative;
-    width: min(100%, 440px);
+    width: min(100%, 600px);
     max-height: 90vh;
     overflow-y: auto;
     background: #f7f8f6;

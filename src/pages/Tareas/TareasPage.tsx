@@ -2,7 +2,7 @@ import TaskCard from "./TaskCard";
 import "./TareasPage.css";
 import TaskInfoModal from "../../Components/TaskInfoModal/TaskInfoModal";
 import { useEffect, useState } from "react";
-import { Tarea } from "../../types/Tarea";
+import type { Tarea } from "../../types";
 
 export default function TareasPage() {
     const [tareas, setTareas] = useState<Tarea[]>([]);

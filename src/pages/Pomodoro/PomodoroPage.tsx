@@ -2,16 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import "./PomodoroPage.css";
 import PomodoroStartModal from "../../Components/PomodoroStartModal/PomodoroStartModal"
 import TaskDetailsModal from "../../Components/TaskDetailModal/TaskDetailsModal"
+import type { Paso, Sesion, Tarea } from "../../types";
 
-//EL MODO DE POMODORO typos lo que puede ser esa variable 
+//EL MODO DE POMODORO typos lo que puede ser esa variable
 type PomodoroMode = "focus" | "shortBreak" | "longBreak";
-interface Tarea {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    fecha: string;
-    progreso: number;
-}
 const DURATIONS: Record<PomodoroMode, number> = {
     focus: 25 * 60,
     shortBreak: 5 * 60,
@@ -47,8 +41,8 @@ export default function PomodoroPage() {
 
     //MODAL DESPUEES DEL PRIMER MODAL
     const [taskDetails, setTaskDetails] = useState(false);
-
-
+    const [sesiones, setSesiones] = useState<Sesion[]>([]);
+    const [pasos, setPasos] = useState<Paso[]>([]);
     // Funcion para pomodoro
     useEffect(() => {
         if (!isRunning) return;
@@ -119,10 +113,29 @@ export default function PomodoroPage() {
             selectedTask.id,
             descripcionTarea
         );
+        try {
+            const sesiones = await window.api.sesionesTarea(selectedTask.id);
+            const pasosTarea = await window.api.listarPasosTarea(selectedTask.id);
+            setSesiones(sesiones);
+            setPasos(pasosTarea);
+        } catch (error) {
+            console.error("Error al obtener las sesiones de la tarea:", error);
+        }
         console.log("Se creo sesion con id " + nuevaSesion.id)
         setIsRunning(true);
     }
+    async function handleMarcarPasoCompletado(pasoId: number) {
+        if (!selectedTask) return;
+        try {
+            const resultado = await window.api.actualizarPasoCompletado(pasoId, selectedTask.id);
+            console.log(`Paso con ID ${pasoId} actualizado. Filas afectadas: ${resultado}`);
+            const pasosTarea = await window.api.listarPasosTarea(selectedTask.id);
+            setPasos(pasosTarea);
+        }catch (error) {
+            console.error("Error al actualizar el paso:", error);
+        }
 
+    }
     return (
 
         <main className="pomodoro-page">
@@ -137,30 +150,27 @@ export default function PomodoroPage() {
             )}
 
             <header className="pomodoro-header">
-                <div className="pomodoro-eye">
+                <div className="pomodoro-heading">
                     <h1>Pomodoro</h1>
                     <p>Trabaja con intención, descansa y mantén el ritmo.</p>
                 </div>
-                <div className="session-counter" aria-label={`${completedSessions} sesiones completadas`}>
+                <p className="session-counter" aria-label={`${completedSessions} sesiones completadas`}>
                     <span className="session-counter-number">{completedSessions}</span>
                     <span>sesiones<br />completadas</span>
-                </div>
+                </p>
             </header>
 
-            <section className="pomodoro-layout" aria-label="Temporizador Pomodoro">
+            <section className="pomodoro-layout" aria-labelledby="timer-heading">
+                <h2 id="timer-heading" className="visually-hidden">Temporizador Pomodoro</h2>
                 <div className="timer-card">
-                    {selectedTask?.titulo ? selectedTask?.titulo : "No se ha seleccionado tarea"}
-                    {descripcion === "" ? <div>No hay descripcion</div> : <div>{descripcion}</div>}
-                    {selectedTask?.id ? <div>ID de la tarea: {selectedTask.id}</div> : null} {/*borrar esto */}
-                    <div className="mode-tabs" role="tablist" aria-label="Modo del temporizador">
+                    <div className="mode-tabs" aria-label="Modo del temporizador">
                         {(Object.keys(MODE_LABELS) as PomodoroMode[]).map((item) => (
                             <button
-                                key={item}
-                                className={mode === item ? "mode-tab active" : "mode-tab"}
-                                type="button"
-                                role="tab"
-                                aria-selected={mode === item}
-                                onClick={() => changeMode(item)}>
+                            key={item}
+                            className={mode === item ? "mode-tab active" : "mode-tab"}
+                            type="button"
+                            aria-pressed={mode === item}
+                            onClick={() => changeMode(item)}>
                                 {MODE_LABELS[item]}
                             </button>
                         ))}
@@ -170,7 +180,7 @@ export default function PomodoroPage() {
                         <div className="timer-inner">
                             <span className="timer-label">{MODE_LABELS[mode]}</span>
                             <time className="timer-time" dateTime={`PT${secondsLeft}S`}>{formatTime(secondsLeft)}</time>
-                            <span className="timer-status">
+                            <span className="timer-status" aria-live="polite">
                                 {isRunning ? "En curso" : secondsLeft === 0 ? "Finalizado" : "Listo para empezar"}
                             </span>
                         </div>
@@ -183,7 +193,65 @@ export default function PomodoroPage() {
                             {isRunning ? "Pausar" : secondsLeft === 0 ? "Empezar de nuevo" : "Iniciar Pomodoro"}
                         </button>
                     </div>
+                
                 </div>
+            </section>
+            <section className="pomodoro-layout task-section" aria-labelledby="selected-task-heading">
+                <div className="section-heading">
+                    <span className="section-eyebrow">Enfoque actual</span>
+                    <h2 id="selected-task-heading">Tarea en curso</h2>
+                </div>
+
+                {selectedTask ? (
+                    <article className="selected-task-card">
+                        <header className="selected-task-header">
+                            <div>
+                                <span className="selected-task-label">Tarea seleccionada</span>
+                                <h3>{selectedTask.titulo}</h3>
+                            </div>
+                            <span className="selected-task-status">En progreso</span>
+                        </header>
+
+                        <p className={descripcion ? "selected-task-description" : "selected-task-description is-empty"}>
+                            {descripcion || "Esta sesión todavía no tiene una descripción."}
+                        </p>
+
+                        <fieldset className="task-steps">
+                            <legend>Pasos de la tarea</legend>
+                            {pasos.length > 0 ? (
+                                <ul className="task-step-list">
+                                    {pasos.map((paso) => {
+                                        const completado = paso.completado === 1;
+                                        return (
+                                            <li className={completado ? "task-step completed" : "task-step"} key={paso.id}>
+                                                <input
+                                                    id={`pomodoro-paso-${paso.id}`}
+                                                    type="checkbox"
+                                                    checked={completado}
+                                                    onChange={() => handleMarcarPasoCompletado(paso.id)}
+                                                />
+                                                <label htmlFor={`pomodoro-paso-${paso.id}`}>{paso.titulo}</label>
+                                                <span className="task-step-status">
+                                                    {completado ? "Completado" : "Pendiente"}
+                                                </span>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ) : (
+                                <p className="task-steps-empty">No hay pasos registrados para esta tarea.</p>
+                            )}
+                        </fieldset>
+                    </article>
+                ) : (
+                    <div className="selected-task-empty" role="status">
+                        <span aria-hidden="true">✓</span>
+                        <div>
+                            <h3>Aún no has seleccionado una tarea</h3>
+                            <p>Inicia un Pomodoro y elige una tarea para ver aquí sus pasos.</p>
+                        </div>
+                    </div>
+                )}
             </section>
         </main>
     );

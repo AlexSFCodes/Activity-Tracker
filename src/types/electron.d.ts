@@ -1,27 +1,4 @@
-export { };
-
-interface Tarea {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  fecha: string;
-  progreso: number;
-}
-interface Sesion {
-  id: number,
-  tarea_id: number,
-  tiempo: number,
-  logro: string,
-  fecha: string
-}
-
-interface Paso {
-  id: number;
-  tarea_id: number;
-  titulo: string;
-  completado: number;
-  orden: number;
-}
+import type { Paso, Sesion, Tarea } from "./index";
 
 declare global {
   interface Window {
@@ -46,6 +23,9 @@ declare global {
         completado?: number
       ) => Promise<{ id: number }>;
       listarPasosTarea: (tarea_id: number) => Promise<Paso[]>;
+      actualizarPasoCompletado: (pasoId: number, tareaId: number) => Promise<number>;
     };
   }
 }
+
+export {};
