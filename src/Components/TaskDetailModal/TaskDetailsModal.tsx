@@ -1,24 +1,51 @@
-import "./TaskDetailsModal.css"
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import "./TaskDetailsModal.css";
+
 interface PomodoroTaskDetailsProps {
-    onClosee: () => void;
-    onIniciaar: (descripcion:string) => void; 
+    taskTitle: string;
+    onClose: () => void;
+    onStart: (descripcion: string) => void;
 }
 
-export default function TaskDetailsModal({onClosee, onIniciaar}:PomodoroTaskDetailsProps) {
+export default function TaskDetailsModal({ taskTitle, onClose, onStart }: PomodoroTaskDetailsProps) {
     const [descripcion, setDescripcion] = useState("");
+
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        onStart(descripcion.trim());
+    }
+
     return (
-        <div className="task-details-modal__overlay">
-            <section className="task-details-modal">
-                <button className="task-details-modal__close" onClick={onClosee}>
-                    ✕
-                </button>
-                {/* Aqui ira programación sobre el task.nombre */}
-                <h1 className="task-details-modal__title">Que quieres lograr?</h1>
-                <input className="task-details-modal__input" placeholder="Ej. Terminar el informe" onChange={(e) => setDescripcion(e.target.value)} />
-                {descripcion}
-                <button className="task-details-modal__primary" onClick={()=>onIniciaar(descripcion)}>Iniciar</button>
+        <div className="task-details-modal__overlay" role="presentation">
+            <section className="task-details-modal" role="dialog" aria-modal="true"
+                aria-labelledby="task-details-modal-title" aria-describedby="task-details-modal-description">
+                <header className="task-details-modal__header">
+                    
+                    <span className="task-details-modal__eyebrow">Objetivo de la sesión</span>
+                    <h2 id="task-details-modal-title">¿Qué quieres lograr?</h2>
+                    <p id="task-details-modal-description">
+                        Define un resultado concreto para mantener el enfoque durante este Pomodoro.
+                    </p>
+                </header>
+
+                <div className="task-details-modal__task">
+                    <span>Tarea seleccionada</span>
+                    <strong>{taskTitle}</strong>
+                </div>
+
+                <form className="task-details-modal__form" onSubmit={handleSubmit}>
+                    <label htmlFor="pomodoro-session-goal">Objetivo</label>
+                    <textarea id="pomodoro-session-goal" value={descripcion} maxLength={180} rows={4}
+                        placeholder="Ej. Terminar la introducción del informe"
+                        onChange={(event) => setDescripcion(event.target.value)} autoFocus />
+                    <span className="task-details-modal__counter" aria-live="polite">{descripcion.length}/180</span>
+
+                    <footer className="task-details-modal__actions">
+                        <button className="task-details-modal__secondary" type="button" onClick={onClose}>Cancelar</button>
+                        <button className="task-details-modal__primary" type="submit">Iniciar Pomodoro</button>
+                    </footer>
+                </form>
             </section>
         </div>
-    )
+    );
 }

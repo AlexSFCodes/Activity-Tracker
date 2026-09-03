@@ -15,7 +15,7 @@ declare global {
       sesionesTarea: (tarea_id: number) => Promise<Sesion[]>;
 
       borrarTarea: (tareaId: number) => Promise<void>;
-      actualizarTiempoSesion: (sesionId: number, tiempo: number) => Promise<{ id: number }>;
+      actualizarTiempoSesion: (sesionId: number, tiempo: number) => Promise<{ changes: number }>;
       crearPaso: (
         tarea_id: number,
         titulo: string,

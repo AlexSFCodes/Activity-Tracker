@@ -46,7 +46,7 @@ ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
 
 //HANDLER PARA OBTENER SESIONES DE ESTUDIO RELACIONADAS A UNA TAREA 
 ipcMain.handle("pomodoro:sesion", (_event, tareaId) => {
-  return db.prepare("SELECT * FROM pomodoro WHERE tarea_id = ? ORDER BY id DESC").all(tareaId);
+  return db.prepare("SELECT * FROM pomodoro WHERE tarea_id = ? AND tiempo > 0 ORDER BY id DESC").all(tareaId);
 });
 
 
@@ -64,7 +64,7 @@ ipcMain.handle("pomodoro:insertar", (_event, tarea_id: number, descripcion: stri
 });
 
 // HANDLER PARA ACTUALIZAR EL CAMPO TIEMPO DE UNA SESION POMODORO 
-ipcMain.handle("pomodoro:actualizarTiempo", (_event, sesionId, tiempo) => {
+ipcMain.handle("pomodoro:actualizarTiempo", (_event, sesionId: number, tiempo: number) => {
   return db.prepare("UPDATE pomodoro SET tiempo = ? WHERE id = ?").run(tiempo, sesionId);
 });
 

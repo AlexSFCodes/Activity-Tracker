@@ -1,23 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./PomodoroPage.css";
 import PomodoroStartModal from "../../Components/PomodoroStartModal/PomodoroStartModal"
 import TaskDetailsModal from "../../Components/TaskDetailModal/TaskDetailsModal"
-import type { Paso, Sesion, Tarea } from "../../types";
+import type { Paso, Tarea } from "../../types";
+import { DURATIONS, MODE_LABELS, type PomodoroMode } from "./pomodoro.constants";
 
 //EL MODO DE POMODORO typos lo que puede ser esa variable
-type PomodoroMode = "focus" | "shortBreak" | "longBreak";
-const DURATIONS: Record<PomodoroMode, number> = {
-    focus: 25 * 60,
-    shortBreak: 5 * 60,
-    longBreak: 15 * 60,
-};
-
-const MODE_LABELS: Record<PomodoroMode, string> = {
-    focus: "Pomodoro",
-    shortBreak: "Descanso corto",
-    longBreak: "Descanso largo",
-};
-
 function formatTime(totalSeconds: number) {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -29,6 +17,9 @@ export default function PomodoroPage() {
     const [secondsLeft, setSecondsLeft] = useState(DURATIONS.focus);
     const [isRunning, setIsRunning] = useState(false);
     const [completedSessions, setCompletedSessions] = useState(0);
+    // ID de la sesión actual
+    const [sesionId, setSesionId] = useState<number | null>(null);
+    const sesionGuardadaRef = useRef<number | null>(null);
 
     //tarea mandada desde el modal
     const [selectedTask, setSelectedTask] = useState<Tarea | undefined>(undefined);
@@ -41,24 +32,44 @@ export default function PomodoroPage() {
 
     //MODAL DESPUEES DEL PRIMER MODAL
     const [taskDetails, setTaskDetails] = useState(false);
-    const [sesiones, setSesiones] = useState<Sesion[]>([]);
     const [pasos, setPasos] = useState<Paso[]>([]);
     // Funcion para pomodoro
+
+
     useEffect(() => {
         if (!isRunning) return;
 
         const timer = window.setInterval(() => {
-            setSecondsLeft((currentSeconds) => {
-                if (currentSeconds > 1) return currentSeconds - 1;
-                window.clearInterval(timer);
-                setIsRunning(false);
-                if (mode === "focus") setCompletedSessions((sessions) => sessions + 1);
-                return 0;
-            });
+            setSecondsLeft(currentSeconds =>
+                Math.max(currentSeconds - 1, 0)
+            );
         }, 1000);
 
         return () => window.clearInterval(timer);
-    }, [isRunning, mode]);
+    }, [isRunning]);
+    useEffect(() => {
+        if (!isRunning || secondsLeft !== 0) return;
+
+        setIsRunning(false);
+
+        if (mode !== "focus" || sesionId === null || sesionGuardadaRef.current === sesionId) return;
+
+        sesionGuardadaRef.current = sesionId;
+        const guardarSesion = async () => {
+            try {
+                const minutosTrabajados = DURATIONS.focus / 60;
+                await window.api.actualizarTiempoSesion(sesionId, minutosTrabajados);
+                setCompletedSessions(sessions => sessions + 1);
+                setSesionId(null);
+                console.log("Sesión finalizada correctamente");
+            } catch (error) {
+                sesionGuardadaRef.current = null;
+                console.error("No se pudo finalizar la sesión:", error);
+            }
+        };
+
+        void guardarSesion();
+    }, [secondsLeft, isRunning, mode, sesionId]);
 
     const progress = useMemo(
         () => ((DURATIONS[mode] - secondsLeft) / DURATIONS[mode]) * 100,
@@ -84,11 +95,18 @@ export default function PomodoroPage() {
             return;
         }
 
-        if (secondsLeft === DURATIONS[mode]) {
-            if (mode === "focus" && !selectedTask) {
-                setStartModal(true); // aun no ha empezado -> mostrar modal primero
-                return;
+        if (mode === "focus" && (secondsLeft === DURATIONS.focus || secondsLeft === 0)) {
+            if (secondsLeft === 0) setSecondsLeft(DURATIONS.focus);
+            if (!selectedTask) {
+                setStartModal(true);
+            } else {
+                setTaskDetails(true);
             }
+            return;
+        }
+
+        if (secondsLeft === 0) {
+            setSecondsLeft(DURATIONS[mode]);
         }
 
         setIsRunning(true); // ya había empezado antes, solo reanuda
@@ -115,15 +133,15 @@ export default function PomodoroPage() {
             selectedTask.id,
             descripcionTarea
         );
+        setSesionId(nuevaSesion.id);
+        sesionGuardadaRef.current = null;
+        console.log("Nueva sesión creada con ID:", nuevaSesion.id);
         try {
-            const sesiones = await window.api.sesionesTarea(selectedTask.id);
             const pasosTarea = await window.api.listarPasosTarea(selectedTask.id);
-            setSesiones(sesiones);
             setPasos(pasosTarea);
         } catch (error) {
             console.error("Error al obtener las sesiones de la tarea:", error);
         }
-        console.log("Se creo sesion con id " + nuevaSesion.id)
         setIsRunning(true);
     }
     async function handleMarcarPasoCompletado(pasoId: number) {
@@ -142,7 +160,13 @@ export default function PomodoroPage() {
 
         <main className="pomodoro-page">
             {/*EL SEGUNDO MODAL A CAMBIAR */}
-            {taskDetails && <TaskDetailsModal onClosee={() => setTaskDetails(false)} onIniciaar={handleIniciarTareaElegida} />}
+            {taskDetails && selectedTask && (
+                <TaskDetailsModal
+                    taskTitle={selectedTask.titulo}
+                    onClose={() => setTaskDetails(false)}
+                    onStart={handleIniciarTareaElegida}
+                />
+            )}
             {/* El primer modal a cambiar */}
             {startModal && (
                 <PomodoroStartModal
