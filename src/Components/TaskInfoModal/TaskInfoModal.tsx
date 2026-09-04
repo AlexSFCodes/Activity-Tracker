@@ -4,11 +4,12 @@ import type { Paso, Sesion, Tarea } from "../../types";
 interface TaskInfoModalProps {
     OnClose: () => void;
     Task: Tarea;
+    pasos: Paso[];
+    porcentaje: number;
 }
 
-function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
+function TaskInfoModal({ OnClose, Task, pasos, porcentaje }: TaskInfoModalProps) {
     const [sesiones, setSesiones] = useState<Sesion[]>([]);
-    const [pasos, setPasos] = useState<Paso[]>([]);
 
     useEffect(() => {
         const obtenerDatos = async () => {
@@ -16,9 +17,6 @@ function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
             setSesiones(sesionesData);
             console.log("Esto es las sesiones "+ sesionesData);
             console.log(sesionesData)
-            const pasosData = await window.api.listarPasosTarea(Task.id);
-            console.log(pasosData);
-            setPasos(pasosData);
         };
 
         obtenerDatos();
@@ -31,10 +29,6 @@ function TaskInfoModal({ OnClose, Task }: TaskInfoModalProps) {
             window.location.reload();
         }
     };
-
-    const porcentaje = pasos.length > 0
-        ? Math.round((pasos.filter(p => p.completado === 1).length / pasos.length) * 100)
-        : Task.progreso;
 
     const sesionesCompletadas = sesiones.length;
 
