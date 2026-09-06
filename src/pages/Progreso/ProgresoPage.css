@@ -1,0 +1,91 @@
+.progreso-page {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 100vh;
+    padding: 48px clamp(20px, 5vw, 72px) 72px;
+    background: linear-gradient(180deg, #f4f6f3 0%, #eaeeea 100%);
+    color: #27312a;
+    container-type: inline-size;
+}
+
+.progreso-container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.progreso-header {
+    margin-bottom: 32px;
+}
+
+.progreso-header h1 {
+    margin: 0;
+    color: #17211a;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -.04em;
+}
+
+.progreso-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 0 28px;
+    padding: 0;
+    list-style: none;
+}
+
+.progreso-stat {
+    display: flex;
+    align-items: center;
+    min-height: 112px;
+    padding: 24px;
+    border: 1px solid #d4ddd5;
+    border-top: 3px solid #56805a;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .85);
+    box-shadow: 0 8px 24px rgba(40, 60, 44, .05);
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.progreso-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.progreso-panel {
+    min-width: 0;
+    min-height: 280px;
+    padding: 28px;
+    border: 1px solid #d4ddd5;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .78);
+    box-shadow: 0 8px 24px rgba(40, 60, 44, .04);
+}
+
+.progreso-panel h2 {
+    margin: 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e4eae4;
+    color: #334037;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+    .progreso-page { padding: 32px 16px 52px; }
+}
+
+@container (max-width: 760px) {
+    .progreso-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .progreso-details { grid-template-columns: minmax(0, 1fr); }
+}
+
+@container (max-width: 380px) {
+    .progreso-summary { grid-template-columns: minmax(0, 1fr); }
+    .progreso-stat { min-height: 88px; padding: 20px; }
+    .progreso-panel { padding: 20px; }
+}

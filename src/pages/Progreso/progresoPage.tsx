@@ -1,10 +1,29 @@
-export default function ProgresoPage() {
+import "./ProgresoPage.css";
 
+export default function ProgresoPage() {
     return (
-        <div>
-            <h1>Progreso Page</h1>
-            {/* Add your content here */}
-            <p>Este es el contenido de la página de progreso.</p>
-        </div>
+        <main className="progreso-page">
+            <div className="progreso-container">
+                <header className="progreso-header">
+                    <h1>Progreso y estadísticas</h1>
+                </header>
+
+                <ul className="progreso-summary">
+                    <li className="progreso-stat">Racha actual</li>
+                    <li className="progreso-stat">Tareas totales</li>
+                    <li className="progreso-stat">Sesiones</li>
+                    <li className="progreso-stat">Tiempo de enfoque</li>
+                </ul>
+
+                <div className="progreso-details">
+                    <section className="progreso-panel" aria-labelledby="tiempo-por-dia">
+                        <h2 id="tiempo-por-dia">Tiempo por día</h2>
+                    </section>
+                    <section className="progreso-panel" aria-labelledby="distribucion-tiempo">
+                        <h2 id="distribucion-tiempo">Distribución de tiempo</h2>
+                    </section>
+                </div>
+            </div>
+        </main>
     );
 }
