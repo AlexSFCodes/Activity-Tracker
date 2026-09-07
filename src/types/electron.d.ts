@@ -3,6 +3,7 @@ import type { Paso, Sesion, Tarea } from "./index";
 declare global {
   interface Window {
     api: {
+      obtenerEstadisticas: () => Promise<{ tareas: Tarea[]; sesiones: Sesion[] }>;
       crearTarea: (
         titulo: string,
         descripcion: string

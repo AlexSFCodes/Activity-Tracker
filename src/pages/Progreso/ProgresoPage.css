@@ -89,3 +89,40 @@
     .progreso-stat { min-height: 88px; padding: 20px; }
     .progreso-panel { padding: 20px; }
 }
+
+.progreso-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.progreso-header p, .progreso-caption { color: #5a695e; line-height: 1.6; }
+.progreso-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; color: #536258; font-size: .9rem; }
+.progreso-period { display: flex; gap: 4px; padding: 5px; border: 1px solid #d4ddd5; border-radius: 12px; background: #fff; }
+.progreso-period button, .progreso-button { padding: 10px 16px; border: 1px solid transparent; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; background: transparent; color: #334b38; }
+.progreso-period button[aria-pressed="true"] { background: #365c3f; color: #fff; }
+.progreso-button { border-color: #b7c9ba; background: #fff; }
+.progreso-button:hover, .progreso-period button[aria-pressed="false"]:hover { background: #e5eee6; }
+.progreso-button:disabled { opacity: .55; cursor: wait; }
+.progreso-page button:focus-visible { outline: 3px solid #56805a; outline-offset: 3px; }
+.progreso-stat { flex-direction: column; align-items: flex-start; gap: 8px; }
+.progreso-stat strong { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; color: #274b30; }
+.progreso-stat small { color: #627067; font-weight: 400; }
+.progreso-caption { font-size: .85rem; margin: 14px 0 20px; }
+.progreso-empty { padding: 28px 0; color: #617066; line-height: 1.7; }
+.progreso-chart-scroll, .progreso-table-scroll { overflow-x: auto; }
+.progreso-chart { display: flex; gap: 8px; padding: 8px 0 12px; }
+.progreso-day { flex: 1; min-width: 0; display: flex; flex-direction: column; text-align: center; gap: 8px; font-size: .65rem; }
+.progreso-day strong { font-weight: 500; }
+.progreso-bar-track { height: 170px; display: flex; align-items: flex-end; border-bottom: 1px solid #bdcfbf; background: repeating-linear-gradient(to top, transparent 0, transparent 41px, #e5ebe5 42px); }
+.progreso-bar { width: 75%; max-width: 40px; margin: 0 auto; background: linear-gradient(#83a780, #426c4b); border-radius: 6px 6px 0 0; }
+.progreso-distribution { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow-y: auto; }
+.progreso-distribution li { margin-bottom: 20px; }
+.progreso-distribution li > div { display: flex; justify-content: space-between; gap: 12px; font-size: .85rem; }
+.progreso-distribution span { overflow-wrap: anywhere; }
+.progreso-distribution strong { white-space: nowrap; font-size: .8rem; }
+.progreso-distribution meter { display: block; width: 100%; height: 14px; margin-top: 7px; }
+.progreso-distribution meter::-webkit-meter-bar { background: #e5ece5; border: 0; }
+.progreso-distribution meter::-webkit-meter-optimum-value { background: #56805a; }
+.progreso-history { margin-top: 24px; min-height: auto; }
+.progreso-history table { width: 100%; border-collapse: collapse; font-size: .85rem; text-align: left; }
+.progreso-history th { color: #536258; background: #edf2ed; }
+.progreso-history th, .progreso-history td { padding: 14px 16px; border-bottom: 1px solid #e1e9e2; }
+.progreso-history td { min-width: 110px; max-width: 320px; overflow-wrap: anywhere; }
+.progreso-more { margin-top: 20px; }
+.progreso-error { padding: 20px; background: #fff0ed; border: 1px solid #d8aaa0; border-radius: 12px; line-height: 1.6; }

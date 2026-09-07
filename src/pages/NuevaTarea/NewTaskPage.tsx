@@ -35,8 +35,7 @@ export default function NewTaskPage() {
             console.log("Tarea creada con id:", nuevaTarea.id);
 
             // creamos los pasos asociados a esa tarea
-            for (let i = 0; i < pasos.length; i++) {
-                const paso = pasos[i];
+            for (const [i, paso] of pasos.entries()) {
                 if (paso.texto.trim() !== "") {
                     await window.api.crearPaso(nuevaTarea.id, paso.texto, i + 1, 0);
                 }

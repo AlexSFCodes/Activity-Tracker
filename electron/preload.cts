@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
+  obtenerEstadisticas: () => ipcRenderer.invoke("estadisticas:obtener"),
   crearTarea: (titulo: string, descripcion: string) =>
     ipcRenderer.invoke("tarea:crear", titulo, descripcion),
   mostrarTareas: () =>

@@ -28,6 +28,20 @@ ipcMain.handle("tarea:listar", () => {
   return db.prepare("SELECT * FROM tarea ORDER BY id DESC").all();
 });
 
+ipcMain.handle("estadisticas:obtener", () => {
+  return db.transaction(() => ({
+    tareas: db.prepare(`
+      SELECT t.id, t.titulo, t.descripcion, t.fecha,
+        CASE WHEN COUNT(p.id) > 0
+          THEN 100.0 * SUM(CASE WHEN p.completado = 1 THEN 1 ELSE 0 END) / COUNT(p.id)
+          ELSE t.progreso END AS progreso
+      FROM tarea t LEFT JOIN paso p ON p.tarea_id = t.id
+      GROUP BY t.id ORDER BY t.id DESC
+    `).all(),
+    sesiones: db.prepare("SELECT * FROM pomodoro WHERE tiempo > 0 ORDER BY fecha DESC, id DESC").all(),
+  }))();
+});
+
 //HANDER PARA JOIN DE LAS TAREAS
 ipcMain.handle("tarea:crear", (_event, titulo, descripcion) => {
   const stmt = db.prepare(
